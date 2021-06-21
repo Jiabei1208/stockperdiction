@@ -1,0 +1,152 @@
+{% extends "pred_app/main.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    {% if msg %} {{msg}} {% endif %}
+    <div id="notavailable" style="color:red"></div>
+    <div class="article">
+        <h2>
+            <span>
+                My Holdings
+            </span>
+        </h2>
+        <div class="clr">
+        </div>
+    </div>
+    <div>
+            <table style="width:100%" border="1">
+                <thead style="font-size:15px">
+                    <th>Sr. No</th>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Current Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    {% for d in data %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td id="name{{forloop.counter}}">{{d.name}}</td>
+                        <td id="symbol{{forloop.counter}}">{{d.symbol}}</td>
+                        <td id="{{d.symbol}}">{{d.price}}</td>
+                        <td id="quantity{{forloop.counter}}">{{d.quantity}}</td>
+                        <td><button class="btn btn-danger" onclick="sellStock({{forloop.counter}})">Sell</button></td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+</div>
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-capitalize" id="exampleModalLabel"><span class="activity">Sell Stock</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Company Name</label>
+                <input type="text" id="name" class="text" name="name"  readonly>
+            </div>
+            <div class="form-group">
+                <label>Symbol</label>
+                <input type="text" id="symbol" class="text" name="symbol" readonly>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" id="price" step=".001" class="text" name="price" readonly>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" id="quantity" class="text" name="quantity" min="=0" value="">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-success">
+            </div>
+
+        </form>
+      </div>
+
+         <div class="modal-footer" id="modal-footer">
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+
+         </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+    const socket = new WebSocket('wss://ws.finnhub.io?token=c3298paad3ieculve15g');
+
+// Connection opened -> Subscribe
+socket.addEventListener('open', function (event) {
+
+        {% for d in data %}
+            var symb = "{{d.symbol}}"
+            console.log(symb)
+            socket.send(JSON.stringify({'type':'subscribe', 'symbol': symb}))
+        {% endfor %}
+
+
+//    socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'}))
+//    socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+    var obj = JSON.parse(event.data)
+
+    if(obj.data){
+        for(var i=0; i < obj.data.length; i++){
+            if(i%2==0)
+                $("#"+obj.data[i].s).css("color", "red")
+            else
+                $("#"+obj.data[i].s).css("color", "green")
+
+            $("#"+obj.data[i].s).text(obj.data[i].p)
+        }
+    }else{
+        $("#notavailable").text("Exchange markets are closed at this time (live rates won't be available at this time)")
+    }
+    //console.log('Message from server ');
+    console.log(obj)
+});
+
+// Unsubscribe
+ var unsubscribe = function(symbol) {
+    socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
+}
+
+
+function sellStock(id){
+    var name = $("#name"+id).text()
+    $("#name").val(name)
+    var symb = $("#symbol"+id).text()
+    $("#symbol").val(symb)
+    var price = $("#"+symb).text()
+    $("#price").val(price)
+    var quantity = $("#quantity"+id).text()
+    $("#quantity").val(quantity)
+    $("#quantity").attr({
+       "max" : quantity,
+
+    });
+
+    $("#messageModal").modal('show')
+
+
+}
+</script>
+
+{% endblock content %}
+

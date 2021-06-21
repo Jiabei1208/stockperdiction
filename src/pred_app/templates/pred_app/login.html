@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Smart Prediction</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  {% comment %} --------------------------------- {% endcomment %}
+
+  <link href="{% static 'pred_app/fonts/font-awesome/css/font-awesome.css' %}" rel="stylesheet" type="text/css"></link>
+  <link href="{% static 'pred_app/css/menusearch.css' %}" rel="stylesheet" type="text/css"></link>
+  <!-- Stylesheet================================================== -->
+  <link href="{% static 'pred_app/css/responsive.css' %}" rel="stylesheet" type="text/css">
+  <script src="{% static 'pred_app/js/modernizr.custom.js' %}" type="text/javascript"></script>
+  <script src="{% static 'pred_app/js/jquery.1.11.1.js' %}" type="text/javascript"></script>
+  <script src="{% static 'pred_app/js/jquery-1.10.2.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'pred_app/js/handlebars.js' %}"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="container">
+    <br>
+    <div class="row mt-5">
+        <div class="col-md-3"></div>
+        <div class="col-md-4 text-center">
+            <h2>
+                <span>
+                    Sign In
+                </span>
+            </h2>
+        </div>
+        <div class="col-md-5"></div>
+    </div>
+    <div class="article">
+        <form action="" id="sendemail" method="POST">
+            {% csrf_token %}
+            <div class="row mt-1">
+                <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label for="username">
+                            Username
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        {{form.username}}
+                    </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label for="password">
+                            Password
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        {{form.password}}
+                    </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-3"></div>
+                <div class="col-md-5">
+                    <input class="send btn btn-danger form-control" id="imageField" name="imageField" src="{% static 'pred_app/img/submit.gif' %}" type="submit"/>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </form>
+        <div class="row mt-1">
+        <div class="col-md-3"></div>
+        <div class="col-md-4 text-center">
+            <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Signup</a></p>
+        </div>
+        <div class="col-md-5"></div>
+    </div>
+    </div>
+</div>
+</body>
+</html>

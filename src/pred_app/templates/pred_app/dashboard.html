@@ -1,0 +1,67 @@
+{% extends "pred_app/main.html" %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <br>
+                <h1 class="text-center text-dark">Your Balance: {{portfolio.balance}}$</h1>
+                <hr>
+            </div>
+        </div>
+        <form action="" id="sendemail" method="POST">
+            {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-2">
+                <label for="name">
+                    <h3>Add Balance</h3>
+                </label>
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" min="0" step="0.01" max="20000" class="text" id="name" name="balance"/>
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6">
+                <input class="send form-control btn btn-danger" id="imageField" name="imageField" src="{% static 'pred_app/img/submit.gif' %}" type="submit" />
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+        </form>
+    </div>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+    
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'transactions' %}" class="btn btn-primary form-control">Transactions</a>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'buy_stock' %}" class="btn btn-success form-control">Buy Stock</a>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'sell_stock' %}" class="btn btn-danger form-control">Sell Stock</a>
+                </div>
+                <div class="col-md-4">
+                    
+                </div>
+            </div>
+        </div>
+    
+
+</div>
+{% endblock content %}

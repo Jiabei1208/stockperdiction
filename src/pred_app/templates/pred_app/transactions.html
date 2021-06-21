@@ -1,0 +1,49 @@
+{% extends "pred_app/main.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    {% if msg %} {{msg}} {% endif %}
+    <div id="notavailable" style="color:red"></div>
+    <div class="article">
+        <h2>
+            <span>
+                Transactions
+            </span>
+        </h2>
+        <div class="clr">
+        </div>
+    </div>
+    <div>
+            <table style="width:100%" border="1">
+                <thead style="font-size:15px">
+                    <th>Sr. No</th>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Balance Before</th>
+                    <th>Balance After</th>
+                    <th>Type</th>
+                </thead>
+                <tbody>
+                    {% for d in data %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{d.name}}</td>
+                        <td>{{d.symbol}}</td>
+                        <td>{{d.price}}</td>
+                        <td>{{d.quantity}}</td>
+                        <td>{{d.balance_before}}</td>
+                        <td>{{d.balance_after}}</td>
+
+                        <td>{{d.type}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+</div>
+
+{% endblock content %}
+
